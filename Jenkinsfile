@@ -3,11 +3,8 @@ pipeline {
     stages {
         stage('Build Application') {
             steps {
-                def mvnHome = tool name: 'Apache Maven 3.8.6', type: 'maven'
-   		 sh "${mvnHome}/bin/mvn -B -DskipTests clean package"
-	    }
-	}	
-        
+                sh 'mvn -f pom.xml clean package'
+            }
             post {
                 success {
                     echo "Now Archiving the Artifacts...."
@@ -15,13 +12,14 @@ pipeline {
                 }
             }
         }
-        stage('Create Tomcat Docker Image'){
-            steps{
-                sh "pwd"
-		sh "ls -a"
-		sh "docker build . -t tomcatsamplewebapp:${env.BUILD_ID}"
 
+        stage('Create Tomcat Docker Image'){
+            steps {
+                sh "pwd"
+                sh "ls -a"
+                sh "docker build . -t tomcatsamplewebapp:${env.BUILD_ID}"
             }
         }
+
     }
 }
