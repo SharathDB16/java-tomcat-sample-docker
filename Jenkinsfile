@@ -3,8 +3,11 @@ pipeline {
     stages {
         stage('Build Application') {
             steps {
-                sh 'mvn -version'
-            }
+                def mvnHome = tool name: 'Apache Maven 3.6.0', type: 'maven'
+   		 sh "${mvnHome}/bin/mvn -B -DskipTests clean package"
+	    }
+	}	
+        
             post {
                 success {
                     echo "Now Archiving the Artifacts...."
